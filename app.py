@@ -6,10 +6,18 @@ from fastapi import FastAPI, File, Request, Response
 import jwt
 from pydantic import BaseModel, EmailStr, Field
 from connect_db import get_class_collection, get_pdf_collection, get_subject_collection, get_user_collection, get_video_collection
-
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Specific domains ko restrict kar sakte ho
+    allow_credentials=True,
+    # Ya phir ["POST", "GET", "OPTIONS"] specify kar sakte ho
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 KEY = os.getenv("SECRET")
 
 
@@ -117,7 +125,7 @@ async def login_user(details: UserLoginTypes, response: Response):
 
 @app.post("/api/add_class")
 async def add_class(details: ClassesTypes, request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -138,7 +146,7 @@ async def add_class(details: ClassesTypes, request: Request):
 
 @app.post("/api/logout")
 async def logout_user(request: Request, response: Response):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -157,7 +165,7 @@ async def logout_user(request: Request, response: Response):
 
 @app.get("/api/get_classes")
 async def get_classes(request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -178,7 +186,7 @@ async def get_classes(request: Request):
 
 @app.post("/api/add_subject")
 async def add_subject(details: SubjectsTypes, request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -200,9 +208,9 @@ async def add_subject(details: SubjectsTypes, request: Request):
     return {"status": 200, "message": "Subject Added", "is_success": True}
 
 
-@app.get("/api/get_subjects")
+@app.post("/api/get_subjects")
 async def get_subjects(details: GetSubjectsTypes, request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -224,7 +232,7 @@ async def get_subjects(details: GetSubjectsTypes, request: Request):
 
 @app.post("/api/add_pdf")
 async def add_pdf(details: PDFsTypes, request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -247,7 +255,7 @@ async def add_pdf(details: PDFsTypes, request: Request):
 
 @app.get("/api/get_pdfs_name")
 async def get_pdfs_name(details: GetPDFsTypesName, request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -269,7 +277,7 @@ async def get_pdfs_name(details: GetPDFsTypesName, request: Request):
 
 @app.get("/api/get_pdf")
 async def get_pdf(details: GetPdfFileType, request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -293,7 +301,7 @@ async def get_pdf(details: GetPdfFileType, request: Request):
 
 @app.post("/api/add_video")
 async def add_video(details: VideoTypes, request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -316,7 +324,7 @@ async def add_video(details: VideoTypes, request: Request):
 
 @app.get("/api/get_videos_name")
 async def get_videos_name(details: GetVideoNameTypes, request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -338,7 +346,7 @@ async def get_videos_name(details: GetVideoNameTypes, request: Request):
 
 @app.get("/api/get_video")
 async def get_video(details: GetVideoTypes, request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
@@ -362,7 +370,7 @@ async def get_video(details: GetVideoTypes, request: Request):
 
 @app.get("/api/get_users_details")
 async def get_users_details(request: Request):
-    user_jwt = request.cookies.get("jwt")
+    user_jwt = request.headers.get('x-auth-token')
     if not user_jwt:
         return {"status": 401, "message": "Unauthorized", "is_success": False}
     if KEY is None:
