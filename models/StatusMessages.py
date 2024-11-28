@@ -1,0 +1,25 @@
+from enum import Enum
+
+
+class StatusMessages(Enum):
+    UNAUTHORIZED = "Unauthorized"
+    SECRET_MISSING = "SECRET key not found in environment"
+    USER_NOT_FOUND = "User Not Found"
+    CLASS_NOT_FOUND = "Class Not Found"
+    SUBJECT_NOT_FOUND = "Subject Not Found"
+    PDF_NOT_FOUND = "PDF Not Found"
+    VIDEO_NOT_FOUND = "Video Not Found"
+    ACCESS_DENIED = "Access Denied"
+    USERS_FETCHED = "Users Fetched Successfully"
+    SUBJECT_ADDED = "Subject Added"
+    VIDEO_ADDED = "Video Added"
+    CLASS_ADDED = "Class Added"
+    PDF_ADDED = "Pdf Added"
+    USER_LOGIN = "User Logged In Successfully"
+    USER_LOGOUT = "User Logged Out Successfully"
+    USER_ALREADY_EXISTS = "User Already Exists"
+    USER_CREATED = "User Created"
+    CLASS_FETCHED = "Classes Fetched Successfully"
+    PDF_FETCHED = "PDF Fetched Successfully"
+    SUBJECT_FETCHED = "Subjects Fetched Successfully"
+    VIDEO_FETCHED = "Video Fetched Successfully"
