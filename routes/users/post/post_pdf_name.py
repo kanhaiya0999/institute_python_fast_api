@@ -17,13 +17,13 @@ class pdfListType(BaseModel):
     subject_object_id: str
 
 
-class getPdfResponseType(BaseResponse):
+class postPdfResponseType(BaseResponse):
     pdfs: List[pdfListType]
 
 
-@router.get("/api/get_pdfs_name")
-async def get_pdfs_name(details: GetPDFsTypesName, request: Request,
-                        user_details: UserRegisterTypes = Depends(authenticate_user)) -> getPdfResponseType:
+@router.post("/api/post_pdfs_name")
+async def post_pdfs_name(details: GetPDFsTypesName, request: Request,
+                         user_details: UserRegisterTypes = Depends(authenticate_user)) -> postPdfResponseType:
 
     pdfs_collection = await get_pdf_collection()
     pdfs = pdfs_collection.find(
@@ -35,7 +35,7 @@ async def get_pdfs_name(details: GetPDFsTypesName, request: Request,
             subject_object_id=pdf["subject_object_id"]
         ) for pdf in pdfs
     ]
-    return getPdfResponseType(
+    return postPdfResponseType(
         status=200,
         message="PDFs Fetched",
         is_success=True,
