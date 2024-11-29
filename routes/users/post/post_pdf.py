@@ -19,7 +19,7 @@ class pdfResponseType(BaseResponse):
     pdf:  Optional[bytes] = None
 
 
-@router.get("/api/get_pdf")
+@router.post("/api/post_pdf")
 async def get_pdf(details: GetPdfFileType, request: Request, user_details: UserRegisterTypes = Depends(authenticate_user)) -> pdfResponseType:
     pdfs_collection = await get_pdf_collection()
     pdf_details = pdfs_collection.find_one(

@@ -20,7 +20,7 @@ class videoType(BaseResponse):
     video:  Optional[bytes] = None
 
 
-@router.get("/api/get_video")
+@router.post("/api/post_video")
 async def get_video(details: GetVideoTypes, request: Request, user_details: UserRegisterTypes = Depends(authenticate_user)) -> videoType:
 
     videos_collection = await get_video_collection()

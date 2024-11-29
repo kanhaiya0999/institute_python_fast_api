@@ -21,11 +21,11 @@ class videoTypesResponse(BaseResponse):
     videos: list[videoTypes]
 
 
-@router.get("/api/get_videos_name")
+@router.post("/api/post_videos_name")
 async def get_videos_name(details: GetVideoNameTypes, request: Request, user_details: UserRegisterTypes = Depends(authenticate_user)) -> videoTypesResponse:
     videos_collection = await get_video_collection()
     videos = videos_collection.find(
-        {"subject_object_id": details.video_object_id}, {"video": False})
+        {"subject_object_id": details.subject_object_id}, {"video": False})
     videos = [
         videoTypes(
             id=str(video["_id"]),
