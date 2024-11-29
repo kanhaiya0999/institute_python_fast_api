@@ -1,6 +1,4 @@
-from typing import List
 from fastapi import APIRouter, Depends, Request
-from pydantic import BaseModel
 
 from models.BaseResponse import BaseResponse
 from models.UserRegisterTypes import UserRegisterTypes
@@ -9,21 +7,16 @@ from utils.authenticate_user import authenticate_user
 router = APIRouter()
 
 
-class pdfListType(BaseModel):
-    id: str
-    name: str
-    subject_object_id: str
-
-
-class getPdfResponseType(BaseResponse):
-    pdfs: List[pdfListType]
+class checkUserResponse(BaseResponse):
+    type: str
 
 
 @router.post("/api/post_check_user")
 async def post_check_user(request: Request,
-                          user_details: UserRegisterTypes = Depends(authenticate_user)) -> BaseResponse:
-    return BaseResponse(
+                          user_details: UserRegisterTypes = Depends(authenticate_user)) -> checkUserResponse:
+    return checkUserResponse(
         status=200,
         message="User Fetched",
-        is_success=True
+        is_success=True,
+        type=user_details.type,
     )
