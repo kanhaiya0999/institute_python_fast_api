@@ -1,40 +1,51 @@
 import os
-from fastapi import FastAPI
-from routes.admin.get import get_users_details
-from routes.admin.post import add_class, add_pdf, add_subject, add_video
-from routes.users.get import get_classes, get_subjects
-from routes.users.post import post_check_user, post_pdf, post_pdf_name, post_video, post_videos_name
-from routes.users.post import login_user, logout_user, register_user
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+
+# Import routers for admin and user
+from routes.admin.get import get_users_details
+from routes.admin.post import post_add_class, post_add_pdf, post_add_subject, post_add_video
+from routes.users.get import get_check_user, get_classes, get_pdf, get_subjects, get_pdf_name, get_video, get_videos_name
+from routes.users.post import post_logout_user, post_register_user, post_login_user
+
 app = FastAPI()
 
-# get user end point
-app.include_router(get_classes.router)
-app.include_router(post_pdf.router)
-app.include_router(get_subjects.router)
-app.include_router(post_videos_name.router)
-app.include_router(post_check_user.router)
-app.include_router(post_pdf_name.router)
+# Define GET and POST routers for user and admin
+user_get_router = APIRouter(prefix="/user", tags=["User - GET"])
+user_post_router = APIRouter(prefix="/user", tags=["User - POST"])
+admin_get_router = APIRouter(prefix="/admin", tags=["Admin - GET"])
+admin_post_router = APIRouter(prefix="/admin", tags=["Admin - POST"])
 
+# User GET routes
+user_get_router.include_router(get_classes.router)
+user_get_router.include_router(get_subjects.router)
+user_get_router.include_router(get_pdf_name.router)
+user_get_router.include_router(get_videos_name.router)
+user_get_router.include_router(get_check_user.router)
+user_get_router.include_router(get_pdf.router)
+user_get_router.include_router(get_video.router)
 
-# post Users End point
-app.include_router(login_user.router)
-app.include_router(logout_user.router)
-app.include_router(register_user.router)
-app.include_router(post_video.router)
+# User POST routes
+user_post_router.include_router(post_login_user.router)
+user_post_router.include_router(post_logout_user.router)
+user_post_router.include_router(post_register_user.router)
 
+# Admin GET routes
+admin_get_router.include_router(get_users_details.router)
 
-# get admin end point
-app.include_router(get_users_details.router)
+# Admin POST routes
+admin_post_router.include_router(post_add_class.router)
+admin_post_router.include_router(post_add_pdf.router)
+admin_post_router.include_router(post_add_subject.router)
+admin_post_router.include_router(post_add_video.router)
 
+# Add routers to the main app
+app.include_router(user_get_router)
+app.include_router(user_post_router)
+app.include_router(admin_get_router)
+app.include_router(admin_post_router)
 
-# post admin end point
-app.include_router(add_class.router)
-app.include_router(add_pdf.router)
-app.include_router(add_subject.router)
-app.include_router(add_video.router)
-
-
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -42,4 +53,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 KEY: str = os.getenv("SECRET", "")

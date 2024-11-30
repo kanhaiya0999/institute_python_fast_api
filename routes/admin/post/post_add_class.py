@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Request
-from fastapi import Depends
+from fastapi import APIRouter, Depends
 from models.UserRegisterTypes import UserRegisterTypes
 from models.BaseResponse import BaseResponse
 from models.ClassesTypes import ClassesTypes
@@ -12,7 +11,7 @@ router = APIRouter()
 
 
 @router.post("/api/add_class")
-async def add_class(details: ClassesTypes, request: Request, user_details: UserRegisterTypes = Depends(authenticate_user)) -> BaseResponse:
+async def add_class(details: ClassesTypes,  user_details: UserRegisterTypes = Depends(authenticate_user)) -> BaseResponse:
 
     if user_details.type != 'admin':
         return BaseResponse(

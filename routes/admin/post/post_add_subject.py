@@ -1,5 +1,5 @@
 from bson import ObjectId
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 
 from models.BaseResponse import BaseResponse
 from models.StatusMessages import StatusMessages
@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.post("/api/add_subject")
-async def add_subject(details: SubjectsTypes, request: Request, user_details: UserRegisterTypes = Depends(authenticate_user)) -> BaseResponse:
+async def add_subject(details: SubjectsTypes, user_details: UserRegisterTypes = Depends(authenticate_user)) -> BaseResponse:
     if user_details.type != 'admin':
         return BaseResponse(
             status=401,

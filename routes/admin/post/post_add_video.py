@@ -1,19 +1,18 @@
 from bson import ObjectId
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 
 from models.BaseResponse import BaseResponse
-from models.PDFsTypes import PDFsTypes
 from models.StatusMessages import StatusMessages
 from models.UserRegisterTypes import UserRegisterTypes
+from models.VideoTypes import VideoTypes
 from utils.authenticate_user import authenticate_user
-from utils.connect_db import get_pdf_collection, get_subject_collection
-
+from utils.connect_db import get_subject_collection, get_video_collection
 
 router = APIRouter()
 
 
-@router.post("/api/add_pdf")
-async def add_pdf(details: PDFsTypes, request: Request, user_details: UserRegisterTypes = Depends(authenticate_user)) -> BaseResponse:
+@router.post("/api/add_video")
+async def add_video(details: VideoTypes,  user_details: UserRegisterTypes = Depends(authenticate_user)) -> BaseResponse:
 
     if user_details.type != 'admin':
         return BaseResponse(
@@ -30,13 +29,12 @@ async def add_pdf(details: PDFsTypes, request: Request, user_details: UserRegist
             message=StatusMessages.SUBJECT_NOT_FOUND.value,
             is_success=False
 
-        )
 
-    pdfs_collection = await get_pdf_collection()
-    pdfs_collection.insert_one(details.model_dump())
+        )
+    videos_collection = await get_video_collection()
+    videos_collection.insert_one(details.model_dump())
     return BaseResponse(
         status=200,
-        message=StatusMessages.PDF_ADDED.value,
+        message=StatusMessages.VIDEO_ADDED.value,
         is_success=True
-
     )

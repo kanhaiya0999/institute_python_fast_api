@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from models.BaseResponse import BaseResponse
@@ -24,7 +24,7 @@ class ClassTypeResponse(BaseResponse):
 
 
 @router.get("/api/get_classes")
-async def get_classes(request: Request, user_details: UserRegisterTypes = Depends(authenticate_user)) -> ClassTypeResponse:
+async def get_classes(user_details: UserRegisterTypes = Depends(authenticate_user)) -> ClassTypeResponse:
     classes_collection = await get_class_collection()
     classes = classes_collection.find().to_list()
     data = [

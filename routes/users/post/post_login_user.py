@@ -1,7 +1,7 @@
 import random
 from typing import Optional
 import fastapi
-from fastapi import Response
+
 import jwt
 
 from models.BaseResponse import BaseResponse
@@ -18,7 +18,7 @@ class LoginResponse(BaseResponse):
 
 
 @router.post("/api/login")
-async def login_user(details: UserLoginTypes, response: Response) -> LoginResponse:
+async def login_user(details: UserLoginTypes) -> LoginResponse:
     from app import KEY
 
     users_collection = await get_user_collection()

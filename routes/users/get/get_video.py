@@ -2,10 +2,9 @@
 
 from typing import Optional
 from bson import ObjectId
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Header
 
 from models.BaseResponse import BaseResponse
-from models.GetVideoTypes import GetVideoTypes
 from models.StatusMessages import StatusMessages
 from models.UserRegisterTypes import UserRegisterTypes
 from utils.authenticate_user import authenticate_user
@@ -20,12 +19,12 @@ class videoType(BaseResponse):
     video:  Optional[bytes] = None
 
 
-@router.post("/api/post_video")
-async def get_video(details: GetVideoTypes, request: Request, user_details: UserRegisterTypes = Depends(authenticate_user)) -> videoType:
+@router.get("/api/get_video")
+async def get_video(video_object_id: str, x_auth_token: str = Header(...),  user_details: UserRegisterTypes = Depends(authenticate_user)) -> videoType:
 
     videos_collection = await get_video_collection()
     video_details = videos_collection.find_one(
-        {"_id": ObjectId(details.video_object_id)})
+        {"_id": ObjectId(video_object_id)})
     if video_details is None:
         return videoType(
             status=404,

@@ -1,9 +1,8 @@
 from typing import Optional
 from bson import ObjectId
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 
 from models.BaseResponse import BaseResponse
-from models.GetPdfFileType import GetPdfFileType
 from models.StatusMessages import StatusMessages
 from models.UserRegisterTypes import UserRegisterTypes
 from utils.authenticate_user import authenticate_user
@@ -19,11 +18,11 @@ class pdfResponseType(BaseResponse):
     pdf:  Optional[bytes] = None
 
 
-@router.post("/api/post_pdf")
-async def get_pdf(details: GetPdfFileType, request: Request, user_details: UserRegisterTypes = Depends(authenticate_user)) -> pdfResponseType:
+@router.get("/api/get_pdf")
+async def get_pdf(pdf_object_id: str,  user_details: UserRegisterTypes = Depends(authenticate_user)) -> pdfResponseType:
     pdfs_collection = await get_pdf_collection()
     pdf_details = pdfs_collection.find_one(
-        {"_id": ObjectId(details.pdf_object_id)})
+        {"_id": ObjectId(pdf_object_id)})
     if pdf_details is None:
         return pdfResponseType(status=404, message=StatusMessages.PDF_NOT_FOUND.value, is_success=False)
 

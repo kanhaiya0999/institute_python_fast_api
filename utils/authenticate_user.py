@@ -3,12 +3,12 @@ from utils.connect_db import get_user_collection
 from models.StatusMessages import StatusMessages
 from models.UserRegisterTypes import UserRegisterTypes
 
-from fastapi import HTTPException, Request
+from fastapi import HTTPException, Header
 import datetime
 
 
-async def authenticate_user(request: Request):
-    user_jwt = request.headers.get('x-auth-token')
+async def authenticate_user(x_auth_token: str = Header(...)):
+    user_jwt = x_auth_token
 
     if not user_jwt:
         raise HTTPException(

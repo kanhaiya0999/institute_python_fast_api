@@ -1,6 +1,6 @@
 
 from typing import Optional
-from fastapi import Request, APIRouter
+from fastapi import APIRouter
 from pydantic import BaseModel
 from models.UserRegisterTypes import UserRegisterTypes
 from models.StatusMessages import StatusMessages
@@ -24,7 +24,7 @@ class GetUsersDetailsResponse(BaseResponse):
 
 
 @router.get("/api/get_users_details", response_model=GetUsersDetailsResponse)
-async def get_users_details(request: Request, user_details: UserRegisterTypes = Depends(authenticate_user)):
+async def get_users_details(user_details: UserRegisterTypes = Depends(authenticate_user)) -> GetUsersDetailsResponse:
 
     if user_details.type != 'admin':
         return GetUsersDetailsResponse(

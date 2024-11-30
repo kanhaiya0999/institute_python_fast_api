@@ -1,9 +1,8 @@
 from typing import List
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from models.BaseResponse import BaseResponse
-from models.GetPDFsTypesName import GetPDFsTypesName
 from models.UserRegisterTypes import UserRegisterTypes
 from utils.authenticate_user import authenticate_user
 from utils.connect_db import get_pdf_collection
@@ -21,13 +20,13 @@ class postPdfResponseType(BaseResponse):
     pdfs: List[pdfListType]
 
 
-@router.post("/api/post_pdfs_name")
-async def post_pdfs_name(details: GetPDFsTypesName, request: Request,
-                         user_details: UserRegisterTypes = Depends(authenticate_user)) -> postPdfResponseType:
+@router.get("/api/get_pdfs_name")
+async def get_pdfs_name(subject_object_id: str,
+                        user_details: UserRegisterTypes = Depends(authenticate_user)) -> postPdfResponseType:
 
     pdfs_collection = await get_pdf_collection()
     pdfs = pdfs_collection.find(
-        {"subject_object_id": details.subject_object_id}, {"pdf": False}).to_list()
+        {"subject_object_id": subject_object_id}, {"pdf": False}).to_list()
     data = [
         pdfListType(
             id=str(pdf["_id"]),
