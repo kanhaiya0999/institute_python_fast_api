@@ -6,7 +6,7 @@ from models.UserRegisterTypes import UserRegisterTypes
 from models.StatusMessages import StatusMessages
 from models.BaseResponse import BaseResponse
 from fastapi import Depends
-from utils.authenticate_user import authenticate_user
+from utils.authenticate_user import authenticate_admin
 from utils.connect_db import get_user_collection
 
 router = APIRouter()
@@ -24,14 +24,8 @@ class GetUsersDetailsResponse(BaseResponse):
 
 
 @router.get("/api/get_users_details", response_model=GetUsersDetailsResponse)
-async def get_users_details(user_details: UserRegisterTypes = Depends(authenticate_user)) -> GetUsersDetailsResponse:
+async def get_users_details(user_details: UserRegisterTypes = Depends(authenticate_admin)) -> GetUsersDetailsResponse:
 
-    if user_details.type != 'admin':
-        return GetUsersDetailsResponse(
-            status=401,
-            message=StatusMessages.UNAUTHORIZED.value,
-            is_success=False
-        )
     user_collection = await get_user_collection()
 
     all_users = user_collection.find()

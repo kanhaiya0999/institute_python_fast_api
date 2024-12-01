@@ -10,7 +10,7 @@ class checkUserResponse(BaseResponse):
     type: str
 
 
-@router.get("/api/post_check_user")
+@router.get("/api/get_check_user")
 async def get_check_user(
         user_details: UserRegisterTypes = Depends(authenticate_user)) -> checkUserResponse:
     return checkUserResponse(

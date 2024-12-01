@@ -35,3 +35,38 @@ async def authenticate_user(x_auth_token: str = Header(...)):
         type=user_details['type'],
 
     )
+
+
+async def authenticate_admin(x_auth_token: str = Header(...)):
+    user_jwt = x_auth_token
+
+    if not user_jwt:
+        raise HTTPException(
+            status_code=401, detail=StatusMessages.UNAUTHORIZED.value
+        )
+
+    user_collection = await get_user_collection()
+    current_date = datetime.datetime.now(datetime.timezone.utc)
+
+    user_details = user_collection.find_one(
+        {"jwt": user_jwt, "jwt_expire": {"$gte": current_date}}
+    )
+
+    if not user_details:
+        raise HTTPException(
+            status_code=404, detail=StatusMessages.USER_NOT_FOUND.value
+        )
+
+    if user_details['type'] != 'admin':
+        raise HTTPException(
+            status_code=401, detail=StatusMessages.UNAUTHORIZED.value
+        )
+
+    return UserRegisterTypes(
+        name=user_details['name'],
+        email=user_details['email'],
+        phone=user_details['phone'],
+        password=user_details['password'],
+        type=user_details['type'],
+
+    )

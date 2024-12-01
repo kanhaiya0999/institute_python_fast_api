@@ -5,7 +5,7 @@ from models.BaseResponse import BaseResponse
 from models.StatusMessages import StatusMessages
 from models.SubjectsTypes import SubjectsTypes
 from models.UserRegisterTypes import UserRegisterTypes
-from utils.authenticate_user import authenticate_user
+from utils.authenticate_user import authenticate_admin
 from utils.connect_db import get_class_collection, get_subject_collection
 
 
@@ -13,13 +13,7 @@ router = APIRouter()
 
 
 @router.post("/api/add_subject")
-async def add_subject(details: SubjectsTypes, user_details: UserRegisterTypes = Depends(authenticate_user)) -> BaseResponse:
-    if user_details.type != 'admin':
-        return BaseResponse(
-            status=401,
-            message=StatusMessages.UNAUTHORIZED.value,
-            is_success=False
-        )
+async def add_subject(details: SubjectsTypes, user_details: UserRegisterTypes = Depends(authenticate_admin)) -> BaseResponse:
     classes_collection = await get_class_collection()
     class_details = classes_collection.find_one(
         {"_id": ObjectId(details.class_name_id)})

@@ -23,3 +23,5 @@ class StatusMessages(Enum):
     PDF_FETCHED = "PDF Fetched Successfully"
     SUBJECT_FETCHED = "Subjects Fetched Successfully"
     VIDEO_FETCHED = "Video Fetched Successfully"
+    CLASS_UPDATED = "Class Updated"
+    SUBJECT_UPDATED = "Subject Updated"

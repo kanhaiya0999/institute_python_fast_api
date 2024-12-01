@@ -12,13 +12,13 @@ from utils.connect_db import get_subject_collection
 router = APIRouter()
 
 
-class SubjectType(BaseModel):
+class GetSubjectType(BaseModel):
     name: str
     id: str
 
 
 class SubjectTypeResponse(BaseResponse):
-    subjects: list[SubjectType]
+    subjects: list[GetSubjectType]
 
 
 @router.get("/api/get_subjects")
@@ -28,7 +28,7 @@ async def get_subjects(class_name_id: str, user_details: UserRegisterTypes = Dep
         {"class_name_id": class_name_id}).to_list()
 
     subjects = [
-        SubjectType(
+        GetSubjectType(
             name=subject["name"],
             id=str(subject["_id"])
         ) for subject in subjects

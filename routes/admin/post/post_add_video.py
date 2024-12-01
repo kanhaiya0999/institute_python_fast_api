@@ -5,21 +5,15 @@ from models.BaseResponse import BaseResponse
 from models.StatusMessages import StatusMessages
 from models.UserRegisterTypes import UserRegisterTypes
 from models.VideoTypes import VideoTypes
-from utils.authenticate_user import authenticate_user
+from utils.authenticate_user import authenticate_admin
 from utils.connect_db import get_subject_collection, get_video_collection
 
 router = APIRouter()
 
 
 @router.post("/api/add_video")
-async def add_video(details: VideoTypes,  user_details: UserRegisterTypes = Depends(authenticate_user)) -> BaseResponse:
+async def add_video(details: VideoTypes,  user_details: UserRegisterTypes = Depends(authenticate_admin)) -> BaseResponse:
 
-    if user_details.type != 'admin':
-        return BaseResponse(
-            status=401,
-            message=StatusMessages.UNAUTHORIZED.value,
-            is_success=False
-        )
     subjects_collection = await get_subject_collection()
     subject_details = subjects_collection.find_one(
         {"_id": ObjectId(details.subject_object_id)})
