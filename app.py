@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # Import routers for admin and user
 from routes.admin.get import get_users_details
 from routes.admin.post import post_add_class, post_add_pdf, post_update_subject, post_add_subject, post_add_video, post_update_class
-from routes.delete import delete_class, delete_subject
+from routes.admin.delete import delete_class, delete_subject
 from routes.users.get import get_check_user, get_classes, get_pdf, get_subjects, get_pdf_name, get_video, get_videos_name
 from routes.users.post import post_logout_user, post_register_user, post_login_user
 
