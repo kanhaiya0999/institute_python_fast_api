@@ -25,3 +25,5 @@ class StatusMessages(Enum):
     VIDEO_FETCHED = "Video Fetched Successfully"
     CLASS_UPDATED = "Class Updated"
     SUBJECT_UPDATED = "Subject Updated"
+    CLASS_DELETED = "Class Deleted"
+    SUBJECT_DELETED = "Subject Deleted"
