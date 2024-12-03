@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class SubjectsTypes(BaseModel):
-    class_name_id: str = Field(max_length=24, min_length=24)
+    class_object_id: str
     name: str

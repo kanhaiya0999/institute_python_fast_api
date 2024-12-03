@@ -16,7 +16,7 @@ router = APIRouter()
 async def add_subject(details: SubjectsTypes, user_details: UserRegisterTypes = Depends(authenticate_admin)) -> BaseResponse:
     classes_collection = await get_class_collection()
     class_details = classes_collection.find_one(
-        {"_id": ObjectId(details.class_name_id)})
+        {"_id": ObjectId(details.class_object_id)})
     if class_details is None:
         return BaseResponse(
             status=404,
@@ -25,6 +25,7 @@ async def add_subject(details: SubjectsTypes, user_details: UserRegisterTypes = 
 
         )
     classes_collection = await get_subject_collection()
+    details.class_object_id = ObjectId(details.class_object_id)  # type: ignore
     classes_collection.insert_one(details.model_dump())
     return BaseResponse(
         status=200,

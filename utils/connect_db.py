@@ -12,7 +12,7 @@ DATABASE_URL: Optional[str] = os.getenv("DATABASE_URL")
 client: Optional[MongoClient[Any]] = None
 
 
-async def connect_db() -> Database[Any]:
+async def get_db() -> Database[Any]:
     global client
     if not DATABASE_URL or not DATABASE_NAME:
         raise Exception("No database name and no database URL found")
@@ -29,35 +29,35 @@ async def connect_db() -> Database[Any]:
 
 
 async def get_user_collection() -> Collection[Any]:
-    db = await connect_db()
+    db = await get_db()
 
     user_collection: Collection[Any] = db["users"]
     return user_collection
 
 
 async def get_class_collection() -> Collection[Any]:
-    db = await connect_db()
+    db = await get_db()
 
     other_collection: Collection[Any] = db["classes"]
     return other_collection
 
 
 async def get_subject_collection() -> Collection[Any]:
-    db = await connect_db()
+    db = await get_db()
 
     other_collection: Collection[Any] = db["subjects"]
     return other_collection
 
 
 async def get_pdf_collection() -> Collection[Any]:
-    db = await connect_db()
+    db = await get_db()
 
     other_collection: Collection[Any] = db["pdfs"]
     return other_collection
 
 
 async def get_video_collection() -> Collection[Any]:
-    db = await connect_db()
+    db = await get_db()
 
     other_collection: Collection[Any] = db["videos"]
     return other_collection

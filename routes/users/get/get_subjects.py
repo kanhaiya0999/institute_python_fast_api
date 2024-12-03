@@ -1,4 +1,5 @@
 
+from bson import ObjectId
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
@@ -22,10 +23,10 @@ class SubjectTypeResponse(BaseResponse):
 
 
 @router.get("/api/get_subjects")
-async def get_subjects(class_name_id: str, user_details: UserRegisterTypes = Depends(authenticate_user)) -> SubjectTypeResponse:
+async def get_subjects(class_object_id: str, user_details: UserRegisterTypes = Depends(authenticate_user)) -> SubjectTypeResponse:
     subjects_collection = await get_subject_collection()
     subjects = subjects_collection.find(
-        {"class_name_id": class_name_id}).to_list()
+        {"class_object_id": ObjectId(class_object_id)}).to_list()
 
     subjects = [
         GetSubjectType(
